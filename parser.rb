@@ -19,28 +19,29 @@ class PageParser
 
 		@__VIEWSTATE = @doc.at_css('#__VIEWSTATE')["value"]
 
-		puts @__EVENTVALIDATION
-
-
+		# POST to get response
 		uri = URI(@url)
 		params = {"__VIEWSTATE" => @__VIEWSTATE,
 				  "__VIEWSTATEGENERATOR" => @__VIEWSTATEGENERATOR,
 				  "__EVENTVALIDATION" => @__EVENTVALIDATION,
-				  "ctl00$ContentPlaceHolder1$ddlProvince" => 51,
 				  "ctl00$ContentPlaceHolder1$txtName" => "李宁",
 				  "ctl00$ContentPlaceHolder1$checkcode" => "puk76",
 				  "ctl00$ContentPlaceHolder1$txtZyUnit" => "四川大学华西医院",
+				  "ctl00$ContentPlaceHolder1$ddlProvince" => 51,
 				  "ctl00$ContentPlaceHolder1$ButtonSearch" => "查询"
 		}
 		uri.query = URI.encode_www_form(params)
-
 		res = Net::HTTP.get_response(uri)
-		puts res.body if res.is_a?(Net::HTTPSuccess)
+		res_bo = res.body if res.is_a?(Net::HTTPSuccess)
+
+		# parse returned data
+		html_doc = Nokogiri::HTML(res_bo)
+		puts html_doc.at_css('#ctl00_ContentPlaceHolder1_lblTitle').text
 
 	end
 end
 
-# 2.times do
+5.times do
 	PageParser.new.get
-# end
+end
 
