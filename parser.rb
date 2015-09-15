@@ -6,11 +6,13 @@ require 'open-uri'
 require 'net/http'
 
 class PageParser
+	@@url = 'http://61.49.18.120/doctorsearch.aspx'
+	@@captchaUrl = 'http://61.49.18.120/pn.aspx'
+	@@detailUrl = 'http://61.49.18.120/Detail.aspx?id='
 	def get
-		@url = 'http://61.49.18.120/doctorsearch.aspx'
 
 		# Fetch and parse HTML document
-		@doc = Nokogiri::HTML(open(@url))
+		@doc = Nokogiri::HTML(open(@@url))
 
 		# Search for nodes by css
 		@__VIEWSTATEGENERATOR = @doc.at_css('#__VIEWSTATEGENERATOR')["value"]
@@ -20,7 +22,7 @@ class PageParser
 		@__VIEWSTATE = @doc.at_css('#__VIEWSTATE')["value"]
 
 		# POST to get response
-		uri = URI(@url)
+		uri = URI(@@url)
 		params = {"__VIEWSTATE" => @__VIEWSTATE,
 				  "__VIEWSTATEGENERATOR" => @__VIEWSTATEGENERATOR,
 				  "__EVENTVALIDATION" => @__EVENTVALIDATION,
@@ -39,6 +41,14 @@ class PageParser
 		puts html_doc.at_css('#ctl00_ContentPlaceHolder1_lblTitle').text
 
 	end
+
+	def get_captcha_img(index)
+	    file_name = "#{index}-image.gif"
+	    open("images/" + file_name, 'wb') do |file|
+	      file << open(@@captchaUrl).read
+	    end
+	end
+
 end
 
 5.times do
