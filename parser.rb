@@ -49,6 +49,14 @@ class PageParser
 	    end
 	end
 
+	def check_existence
+		if page.at_css('div.errorMsg')
+		    puts 'Error message found on page'
+		else
+		    puts 'No error message found on page'
+		end
+	end
+
 end
 
 5.times do
