@@ -23,6 +23,7 @@ class PageParser
 
 		# POST to get response
 		uri = URI(@@url)
+		puts uri
 		params = {"__VIEWSTATE" => @__VIEWSTATE,
 				  "__VIEWSTATEGENERATOR" => @__VIEWSTATEGENERATOR,
 				  "__EVENTVALIDATION" => @__EVENTVALIDATION,
@@ -59,7 +60,7 @@ class PageParser
 
 end
 
-5.times do
+1.times do
 	PageParser.new.get
 end
 

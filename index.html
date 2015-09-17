@@ -1,0 +1,138 @@
+<!DOCTYPE html>
+<html>
+    <head>
+        <meta charset="utf-8">
+        <meta http-equiv="X-UA-Compatible" content="IE=edge">
+        <title></title>
+        <link rel="stylesheet" href="">
+
+        <style>
+			.submit {
+				cursor: pointer;
+				padding: 5px 15px;
+				background: lightblue;
+				color: white;
+			}
+        </style>
+    </head>
+    <body>
+        省份：<select name="" id="pro" class="mySelect">
+            <option value="11">北京市</option>
+            <option value="12">天津市</option>
+            <option value="13">河北省</option>
+            <option value="14">山西省</option>
+            <option value="15">内蒙古自治区</option>
+            <option value="21">辽宁省</option>
+            <option value="22">吉林省</option>
+            <option value="23">黑龙江省</option>
+            <option value="31">上海市</option>
+            <option value="32">江苏省</option>
+            <option value="33">浙江省</option>
+            <option value="34">安徽省</option>
+            <option value="35">福建省</option>
+            <option value="36">江西省</option>
+            <option value="37">山东省</option>
+            <option value="41">河南省</option>
+            <option value="42">湖北省</option>
+            <option value="43">湖南省</option>
+            <option value="44">广东省</option>
+            <option value="45">广西壮族自治区</option>
+            <option value="46">海南省</option>
+            <option value="50">重庆市</option>
+            <option value="51">四川省</option>
+            <option value="52">贵州省</option>
+            <option value="53">云南省</option>
+            <option value="54">西藏自治区</option>
+            <option value="61">陕西省</option>
+            <option value="62">甘肃省</option>
+            <option value="63">青海省</option>
+            <option value="64">宁夏回族自治区</option>
+            <option value="65">新疆维吾尔自治区</option>
+        </select>
+        医师姓名：<input name="" type="text" value="" id="name" class="myTxt">
+        所在医疗机构：<input name="" type="text" value="" id="org" class="myTxt">
+        验证码:<input name="" type="text" id="cap" class="myTxt" style="width: 80px">
+        <img id="imgVilidate" alt="更换验证码" src="" style="cursor: pointer; vertical-align: bottom" border="0" onclick="ChangeCheckCode();" height="30" width="100px">
+        <a href="javascript:;" onclick="ChangeCheckCode();">换一张</a>
+
+        <span id="submit">查询</span>
+
+        <script>
+        var doc = document;
+        var $imgVilidate = doc.getElementById('imgVilidate');
+        var $submit = doc.getElementById('submit');
+        var __VIEWSTATE;
+        var __VIEWSTATEGENERATOR;
+        var __EVENTVALIDATION;
+
+        function ChangeCheckCode() {
+        	XHR("GET", "http://127.0.0.1:4567/foo", true, cb);
+        }
+
+        var XHR = function(method, url, isasync, callback) {
+            var request = new XMLHttpRequest(),
+                _this = this;
+            request.open(method, url, isasync);
+            request.onload = function() {
+                if (request.status === 200 && request.readyState === 4) {
+                    var cb = callback.bind(_this,request.responseText);
+                    cb();
+                } else if (request.status === 408) {
+                    console.log('retrying...');
+                    _this.XHR(method, url, isasync, callback);
+                }
+            };
+            request.onerror = function() {};
+            request.send(null);
+        };
+
+        function get() {
+
+	        XHR("GET", "http://127.0.0.1:4567/foo", true, cb);
+        }
+
+        function query() {
+        	var pro = document.getElementById("pro").value;
+        	var name = document.getElementById("name").value;
+        	var org = document.getElementById("org").value;
+        	var cap = document.getElementById("cap").value;
+
+        	XHR("GET", "http://127.0.0.1:4567/query?" + 
+        		"pro=" + pro + 
+        		"&name=" + name + 
+        		"&__VIEWSTATE=" + __VIEWSTATE + 
+        		"&__VIEWSTATEGENERATOR=" + __VIEWSTATEGENERATOR + 
+        		"&__EVENTVALIDATION=" + __EVENTVALIDATION + 
+        		"&org=" + org + 
+        		"&cap=" + cap, true, queryCB);
+        }
+
+        function queryCB(data) {
+        	console.log(data);
+        	get();
+        }
+
+
+        function cb(data) {
+        	data = JSON.parse(data);
+        	$imgVilidate.setAttribute('src', "images/" + data.img_url);
+            console.log(data);
+            __VIEWSTATE = data['__VIEWSTATE']
+            console.log(__VIEWSTATE);
+            __VIEWSTATEGENERATOR = data['__VIEWSTATEGENERATOR']
+            __EVENTVALIDATION = data['__EVENTVALIDATION']
+
+        }
+
+        $submit.addEventListener('click', submitQuery);
+
+        function submitQuery() {
+        	query();
+        }
+
+        window.onload = function() {
+        	get();
+        };
+        </script>
+    </body>
+</html>

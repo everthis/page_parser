@@ -7,7 +7,7 @@ require 'open-uri'
 require 'net/http'
 require 'json'
 
-set :environment, :production
+set :environment, :development
 
 set :foo, 'bar'
 
@@ -22,45 +22,28 @@ class PageParser
 	@@captchaUrl = 'http://61.49.18.120/pn.aspx'
 	@@detailUrl = 'http://61.49.18.120/Detail.aspx?id='
 
+	def pre_get
+
+	end
+
 	def get
 
 		# Fetch and parse HTML document
 		@doc = Nokogiri::HTML(open(@@url))
 
 		# Search for nodes by css
-		@__VIEWSTATEGENERATOR = @doc.at_css('#__VIEWSTATEGENERATOR')["value"]
+		__VIEWSTATEGENERATOR = @doc.at_css('#__VIEWSTATEGENERATOR')["value"]
 
-		@__EVENTVALIDATION = @doc.at_css('#__EVENTVALIDATION')["value"]
+		__EVENTVALIDATION = @doc.at_css('#__EVENTVALIDATION')["value"]
 
-		@__VIEWSTATE = @doc.at_css('#__VIEWSTATE')["value"]
+		__VIEWSTATE = @doc.at_css('#__VIEWSTATE')["value"]
 
 		returnObj = {
-			"__VIEWSTATE": @__VIEWSTATE,
-		    "__VIEWSTATEGENERATOR": @__VIEWSTATEGENERATOR,
-		    "__EVENTVALIDATION": @__EVENTVALIDATION,
+			"__VIEWSTATE": __VIEWSTATE,
+		    "__VIEWSTATEGENERATOR": __VIEWSTATEGENERATOR,
+		    "__EVENTVALIDATION": __EVENTVALIDATION,
 		    "ctl00$ContentPlaceHolder1$ButtonSearch": "查询"
 		}
-
-		# LocationList.new(returnObj)
-
-		# POST to get response
-		# uri = URI(@@url)
-		# params = {"__VIEWSTATE" => @__VIEWSTATE,
-		# 		  "__VIEWSTATEGENERATOR" => @__VIEWSTATEGENERATOR,
-		# 		  "__EVENTVALIDATION" => @__EVENTVALIDATION,
-		# 		  "ctl00$ContentPlaceHolder1$txtName" => "李宁",
-		# 		  "ctl00$ContentPlaceHolder1$checkcode" => "puk76",
-		# 		  "ctl00$ContentPlaceHolder1$txtZyUnit" => "四川大学华西医院",
-		# 		  "ctl00$ContentPlaceHolder1$ddlProvince" => 51,
-		# 		  "ctl00$ContentPlaceHolder1$ButtonSearch" => "查询"
-		# }
-		# uri.query = URI.encode_www_form(params)
-		# res = Net::HTTP.get_response(uri)
-		# res_bo = res.body if res.is_a?(Net::HTTPSuccess)
-
-		# # parse returned data
-		# html_doc = Nokogiri::HTML(res_bo)
-		# puts html_doc.at_css('#ctl00_ContentPlaceHolder1_lblTitle').text
 
 	end
 
@@ -94,3 +77,39 @@ get '/foo' do
   returnObj = obj.merge!("img_url": img_url)
   JSON.generate(returnObj)
 end
+
+get '/query' do
+	headers 'Access-Control-Allow-Origin' => '*'
+	__VIEWSTATE = params['__VIEWSTATE'].gsub(' ','+')
+	__VIEWSTATEGENERATOR = params['__VIEWSTATEGENERATOR'].gsub(' ','+')
+	__EVENTVALIDATION = params['__EVENTVALIDATION'].gsub(' ','+')
+
+	name = params['name']
+	org = params['org']
+	cap = params['cap']
+	pro = params['pro']
+
+	uri = URI('http://61.49.18.120/doctorsearch.aspx')
+	# puts uri
+	params = {"__VIEWSTATE" => __VIEWSTATE,
+			  "__VIEWSTATEGENERATOR" => __VIEWSTATEGENERATOR,
+			  "__EVENTVALIDATION" => __EVENTVALIDATION,
+			  "ctl00$ContentPlaceHolder1$txtName" => name,
+			  "ctl00$ContentPlaceHolder1$checkcode" => cap,
+			  "ctl00$ContentPlaceHolder1$txtZyUnit" => org,
+			  "ctl00$ContentPlaceHolder1$ddlProvince" => pro,
+			  "ctl00$ContentPlaceHolder1$ButtonSearch" => "查询"
+	}
+	uri.query = URI.encode_www_form(params)
+	# puts uri
+
+	res = Net::HTTP.get_response(uri)
+	res_bo = res.body if res.is_a?(Net::HTTPSuccess)
+
+	res_bo
+
+end
+
+
+
+
