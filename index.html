@@ -4,10 +4,9 @@
         <meta charset="utf-8">
         <meta http-equiv="X-UA-Compatible" content="IE=edge">
         <title></title>
-        <link rel="stylesheet" href="">
 
         <style>
-			.submit {
+			#submit {
 				cursor: pointer;
 				padding: 5px 15px;
 				background: lightblue;
@@ -52,7 +51,7 @@
         医师姓名：<input name="" type="text" value="" id="name" class="myTxt">
         所在医疗机构：<input name="" type="text" value="" id="org" class="myTxt">
         验证码:<input name="" type="text" id="cap" class="myTxt" style="width: 80px">
-        <img id="imgVilidate" alt="更换验证码" src="" style="cursor: pointer; vertical-align: bottom" border="0" onclick="ChangeCheckCode();" height="30" width="100px">
+        <img id="imgVilidate" alt="更换验证码" src="" style="cursor: pointer; vertical-align: bottom" border="0" height="30" width="100px">
         <a href="javascript:;" onclick="ChangeCheckCode();">换一张</a>
 
         <span id="submit">查询</span>
@@ -64,10 +63,7 @@
         var __VIEWSTATE;
         var __VIEWSTATEGENERATOR;
         var __EVENTVALIDATION;
-
-        function ChangeCheckCode() {
-        	XHR("GET", "http://127.0.0.1:4567/foo", true, cb);
-        }
+        var cookie;
 
         var XHR = function(method, url, isasync, callback) {
             var request = new XMLHttpRequest(),
@@ -86,9 +82,29 @@
             request.send(null);
         };
 
-        function get() {
+        if ($imgVilidate) {
+            $imgVilidate.addEventListener('click', ChangeCheckCode, false);
+        };
 
-	        XHR("GET", "http://127.0.0.1:4567/foo", true, cb);
+        if ($submit) {
+            $submit.addEventListener('click', submitQuery);
+        };
+
+        function ChangeCheckCode() {
+        	XHR("GET", "http://127.0.0.1:4567/captcha?cookie=" + cookie, true, captchaCallback);
+        }
+
+        function captchaCallback(data) {
+            var initCallbackData = JSON.parse(data);
+            $imgVilidate.setAttribute('src', "images/" + initCallbackData.img_url);
+
+            console.log(initCallbackData);
+        }
+
+
+        function init() {
+
+	        XHR("GET", "http://127.0.0.1:4567/init", true, initCallback);
         }
 
         function query() {
@@ -103,36 +119,36 @@
         		"&__VIEWSTATE=" + __VIEWSTATE + 
         		"&__VIEWSTATEGENERATOR=" + __VIEWSTATEGENERATOR + 
         		"&__EVENTVALIDATION=" + __EVENTVALIDATION + 
+                "&cookie=" + cookie + 
         		"&org=" + org + 
         		"&cap=" + cap, true, queryCB);
         }
 
         function queryCB(data) {
         	console.log(data);
-        	get();
+        	init();
         }
 
+        function initCallback(data) {
 
-        function cb(data) {
-        	data = JSON.parse(data);
-        	$imgVilidate.setAttribute('src', "images/" + data.img_url);
-            console.log(data);
-            __VIEWSTATE = data['__VIEWSTATE']
-            console.log(__VIEWSTATE);
-            __VIEWSTATEGENERATOR = data['__VIEWSTATEGENERATOR']
-            __EVENTVALIDATION = data['__EVENTVALIDATION']
+        	var initCallbackData = JSON.parse(data);
+        	$imgVilidate.setAttribute('src', "images/" + initCallbackData.img_url);
+
+            console.log(initCallbackData);
+
+            cookie = initCallbackData["cookie"];
+            __VIEWSTATE = initCallbackData['__VIEWSTATE'];
+            __VIEWSTATEGENERATOR = initCallbackData['__VIEWSTATEGENERATOR'];
+            __EVENTVALIDATION = initCallbackData['__EVENTVALIDATION'];
 
         }
-
-        $submit.addEventListener('click', submitQuery);
 
         function submitQuery() {
         	query();
         }
 
-        window.onload = function() {
-        	get();
-        };
+        window.addEventListener('load', init, false);
+
         </script>
     </body>
 </html>

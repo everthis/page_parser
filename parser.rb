@@ -34,9 +34,12 @@ class PageParser
 				  "ctl00$ContentPlaceHolder1$ButtonSearch" => "查询"
 		}
 		uri.query = URI.encode_www_form(params)
+		puts uri.query
 		res = Net::HTTP.get_response(uri)
 		res_bo = res.body if res.is_a?(Net::HTTPSuccess)
-
+		puts res['Set-Cookie']
+		cookie = res.response['set-cookie'].split('; ')[0]
+		puts cookie
 		# parse returned data
 		html_doc = Nokogiri::HTML(res_bo)
 		puts html_doc.at_css('#ctl00_ContentPlaceHolder1_lblTitle').text
