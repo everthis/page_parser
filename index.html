@@ -5,61 +5,100 @@
         <meta http-equiv="X-UA-Compatible" content="IE=edge">
         <title></title>
 
+        <link rel="stylesheet" href="node_modules/normalize.css/normalize.css">
         <style>
-			#submit {
-				cursor: pointer;
-				padding: 5px 15px;
-				background: lightblue;
-				color: white;
-			}
+            html {
+              box-sizing: border-box;
+            }
+            *, *:before, *:after {
+              box-sizing: inherit;
+            }
+
+            #query-section {
+                text-align: center;
+                padding: 20px 0;
+            }
+            #query-section span,
+            #query-section select,
+            #query-section input,
+            #query-section a {
+                display: inline-block;
+                height: 30px;
+                line-height: 30px;
+                vertical-align: top;
+            }
+            #query-section input {
+                padding: 0;
+                border: 1px solid #ddd;
+            }
+            #query-section select {
+                vertical-align: middle;
+            }
+            #submit {
+                cursor: pointer;
+                padding: 0 15px;
+                background: #3A1FB9;
+                color: white;
+                margin: 0 0 0 20px;
+            }
         </style>
     </head>
     <body>
-        省份：<select name="" id="pro" class="mySelect">
-            <option value="11">北京市</option>
-            <option value="12">天津市</option>
-            <option value="13">河北省</option>
-            <option value="14">山西省</option>
-            <option value="15">内蒙古自治区</option>
-            <option value="21">辽宁省</option>
-            <option value="22">吉林省</option>
-            <option value="23">黑龙江省</option>
-            <option value="31">上海市</option>
-            <option value="32">江苏省</option>
-            <option value="33">浙江省</option>
-            <option value="34">安徽省</option>
-            <option value="35">福建省</option>
-            <option value="36">江西省</option>
-            <option value="37">山东省</option>
-            <option value="41">河南省</option>
-            <option value="42">湖北省</option>
-            <option value="43">湖南省</option>
-            <option value="44">广东省</option>
-            <option value="45">广西壮族自治区</option>
-            <option value="46">海南省</option>
-            <option value="50">重庆市</option>
-            <option value="51">四川省</option>
-            <option value="52">贵州省</option>
-            <option value="53">云南省</option>
-            <option value="54">西藏自治区</option>
-            <option value="61">陕西省</option>
-            <option value="62">甘肃省</option>
-            <option value="63">青海省</option>
-            <option value="64">宁夏回族自治区</option>
-            <option value="65">新疆维吾尔自治区</option>
-        </select>
-        医师姓名：<input name="" type="text" value="" id="name" class="myTxt">
-        所在医疗机构：<input name="" type="text" value="" id="org" class="myTxt">
-        验证码:<input name="" type="text" id="cap" class="myTxt" style="width: 80px">
-        <img id="imgVilidate" alt="更换验证码" src="" style="cursor: pointer; vertical-align: bottom" border="0" height="30" width="100px">
-        <a href="javascript:;" onclick="ChangeCheckCode();">换一张</a>
+    <div id="query-section">
+        <span>省份：</span>
+        <span>
+            <select name="" id="pro" class="mySelect">
+                <option value="11">北京市</option>
+                <option value="12">天津市</option>
+                <option value="13">河北省</option>
+                <option value="14">山西省</option>
+                <option value="15">内蒙古自治区</option>
+                <option value="21">辽宁省</option>
+                <option value="22">吉林省</option>
+                <option value="23">黑龙江省</option>
+                <option value="31">上海市</option>
+                <option value="32">江苏省</option>
+                <option value="33">浙江省</option>
+                <option value="34">安徽省</option>
+                <option value="35">福建省</option>
+                <option value="36">江西省</option>
+                <option value="37">山东省</option>
+                <option value="41">河南省</option>
+                <option value="42">湖北省</option>
+                <option value="43">湖南省</option>
+                <option value="44">广东省</option>
+                <option value="45">广西壮族自治区</option>
+                <option value="46">海南省</option>
+                <option value="50">重庆市</option>
+                <option value="51">四川省</option>
+                <option value="52">贵州省</option>
+                <option value="53">云南省</option>
+                <option value="54">西藏自治区</option>
+                <option value="61">陕西省</option>
+                <option value="62">甘肃省</option>
+                <option value="63">青海省</option>
+                <option value="64">宁夏回族自治区</option>
+                <option value="65">新疆维吾尔自治区</option>
+            </select>
+        </span>
+        <span>医师姓名：</span><input name="" type="text" value="" id="name" class="myTxt">
+        <span>所在医疗机构：</span><input name="" type="text" value="" id="org" class="myTxt">
+        <span>验证码：</span><input name="" type="text" id="cap" class="myTxt" style="width: 80px">
+        <span><img id="imgVilidate" alt="更换验证码" src="" style="cursor: pointer; vertical-align: bottom" border="0" height="30px" width="100px"></span>
+        <span><a href="javascript:;" onclick="ChangeCheckCode();">换一张</a></span>        
 
         <span id="submit">查询</span>
+    </div>
+    <div id="alert"></div>
+    <div id="result"></div>
+
 
         <script>
         var doc = document;
         var $imgVilidate = doc.getElementById('imgVilidate');
         var $submit = doc.getElementById('submit');
+        var $alert = doc.getElementById('alert');
+        var $result = doc.getElementById('result');
         var __VIEWSTATE;
         var __VIEWSTATEGENERATOR;
         var __EVENTVALIDATION;
@@ -126,6 +165,12 @@
 
         function queryCB(data) {
         	console.log(data);
+            data = JSON.parse(data);
+            if (data.type === 0 || data.type === 1 || data.type === 3) {
+                $alert.innerHTML = data.content;
+            } else if (data.type === 2){
+                $result.innerHTML = data.content;
+            };
         	init();
         }
 
@@ -144,6 +189,8 @@
         }
 
         function submitQuery() {
+            $alert.innerHTML = ""; 
+            $result.innerHTML = "";
         	query();
         }
 

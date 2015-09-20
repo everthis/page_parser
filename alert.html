@@ -1,0 +1,208 @@
+<script>alert('验证码失效，请重新输入！');</script>
+
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml">
+<head>
+    <style type="text/css">
+        body
+        {
+            font-size: 14px;
+        }
+        .myTxt
+        {
+            height: 30px;
+        }
+        .mySelect
+        {
+            height: 35px;
+        }
+        
+        .myLine
+        {
+            height: 1px;
+            background-color: Black;
+        }
+        
+        .myButton
+        {
+            height: 50px;
+            padding: 5px;
+            min-width: 100px;
+            background-color: blue;
+            color: #fff;
+            font-size: 16px;
+            font-weight: bold;
+            cursor: pointer;
+            border: 1px solid blue;
+        }
+        .myNotice
+        {
+            color: #ff6a00;
+        }
+        .myNotice li
+        {
+            list-style-type: inherit;
+            padding: 3px;
+        }
+    </style>
+    
+    <title>医师执业注册信息查询</title>
+    <script type="text/javascript">
+        //提交表单之前的数据验证
+        function CheckSearchCondition() {
+
+
+            var name = fTrim(document.getElementById("ctl00_ContentPlaceHolder1_txtName").value);
+            var zyUnit = fTrim(document.getElementById("ctl00_ContentPlaceHolder1_txtZyUnit").value);
+            var checkcode = fTrim(document.getElementById("ctl00_ContentPlaceHolder1_checkcode").value);
+
+
+
+            if (name == "") {
+                alert("请输入医师姓名！");
+                return false;
+            }
+            else if (name.length < 2) {
+                alert("医师姓名不能少于2个字！");
+                return false;
+            }
+
+            if (zyUnit == "") {
+                alert("请输入所在医疗机构！");
+                return false;
+            }
+            else if (zyUnit.length < 4) {
+                alert("所在医疗机构不能少于4个字！");
+                return false;
+            }
+
+
+            if (checkcode == "") {
+                alert("请输入验证码！");
+                return false;
+            }
+
+        }
+
+
+        //替换空格
+        function fTrim(str) {
+            return str.replace(/(^\s*)|(\s*$)/g, "");
+        }
+
+        function ChangeCheckCode() {
+            document.getElementById("imgVilidate").src = "pn.aspx?t=" + new Date();
+        }
+        
+    </script>
+<title>
+
+</title></head>
+<body style="padding: 0px; margin: 0px; margin-left: auto; margin-right: auto;">
+    <form name="aspnetForm" method="post" action="doctorsearch.aspx" id="aspnetForm">
+<div>
+<input type="hidden" name="__VIEWSTATE" id="__VIEWSTATE" value="/wEPDwUKMTAyMDk3NTgwMQ8WAh4KcmVzdWx0X251bQL/////DxYCZg9kFgICAw9kFgICAQ9kFgRmDw8WAh4EVGV4dAVz5p+l6K+i5oiq5q2i5YiwMjAxNS03LTE15pelMOeCueOAguafpeivouaVsOaNrue7k+aenOS7peWQhOecgeOAgeiHquayu+WMuuOAgeebtOi+luW4guWNq+eUn+WOhe+8iOWxgO+8ieaVsOaNruS4uuWHhmRkAgEPEA8WBh4ORGF0YVZhbHVlRmllbGQFBENvZGUeDURhdGFUZXh0RmllbGQFBE5hbWUeC18hRGF0YUJvdW5kZ2QQFR8J5YyX5Lqs5biCCeWkqea0peW4ggnmsrPljJfnnIEJ5bGx6KW/55yBEuWGheiSmeWPpOiHquayu+WMugnovr3lroHnnIEJ5ZCJ5p6X55yBDOm7kem+meaxn+ecgQnkuIrmtbfluIIJ5rGf6IuP55yBCea1meaxn+ecgQnlronlvr3nnIEJ56aP5bu655yBCeaxn+ilv+ecgQnlsbHkuJznnIEJ5rKz5Y2X55yBCea5luWMl+ecgQnmuZbljZfnnIEJ5bm/5Lic55yBFeW5v+ilv+WjruaXj+iHquayu+WMugnmtbfljZfnnIEJ6YeN5bqG5biCCeWbm+W3neecgQnotLXlt57nnIEJ5LqR5Y2X55yBD+ilv+iXj+iHquayu+WMugnpmZXopb/nnIEJ55SY6IKD55yBCemdkua1t+ecgRXlroHlpI/lm57ml4/oh6rmsrvljLoY5paw55aG57u05ZC+5bCU6Ieq5rK75Yy6FR8CMTECMTICMTMCMTQCMTUCMjECMjICMjMCMzECMzICMzMCMzQCMzUCMzYCMzcCNDECNDICNDMCNDQCNDUCNDYCNTACNTECNTICNTMCNTQCNjECNjICNjMCNjQCNjUUKwMfZ2dnZ2dnZ2dnZ2dnZ2dnZ2dnZ2dnZ2dnZ2dnZ2dnZ2RkZNOtZTvXqwbzgNPA5WAuJHejhGlwa57enGJraPVvAnVw" />
+</div>
+
+<div>
+
+	<input type="hidden" name="__VIEWSTATEGENERATOR" id="__VIEWSTATEGENERATOR" value="795955C7" />
+	<input type="hidden" name="__EVENTVALIDATION" id="__EVENTVALIDATION" value="/wEWJALB3ZreCgLFu8y2BwLFu8i2BwLFu/S2BwLFu/C2BwLFu/y2BwLEu8y2BwLEu8i2BwLEu/S2BwLHu8y2BwLHu8i2BwLHu/S2BwLHu/C2BwLHu/y2BwLHu/i2BwLHu+S2BwLGu8y2BwLGu8i2BwLGu/S2BwLGu/C2BwLGu/y2BwLGu/i2BwLBu8C2BwLBu8y2BwLBu8i2BwLBu/S2BwLBu/C2BwLAu8y2BwLAu8i2BwLAu/S2BwLAu/C2BwLAu/y2BwK0w7i7DQKLrteBDQKi5InPCALiheC5DWRR+b1V9lZefUPPldeKfOU5yzR1rYBszU6bm43GHVAp" />
+</div>
+    <div style="width: 990px; margin-left: auto; margin-right: auto;">
+        <div>
+            <img height="1" src="img/block.gif" width="1" alt="" />
+            <img src="img/logo.jpg" width="990" height="149" alt="" />
+        </div>
+    </div>
+    <div style="width: 990px; margin-left: auto; margin-right: auto;">
+        
+    <div>
+        <div style="height: 20px;">
+        </div>
+        <div style="text-align: center;">
+            <span id="ctl00_ContentPlaceHolder1_lblTitle" style="color:Red;font-weight:bold;">查询截止到2015-7-15日0点。查询数据结果以各省、自治区、直辖市卫生厅（局）数据为准</span>
+        </div>
+        <div style="height: 10px;">
+        </div>
+        <div class="myLine">
+        </div>
+        <div style="height: 10px;">
+        </div>
+        <div>
+            省份：<select name="ctl00$ContentPlaceHolder1$ddlProvince" id="ctl00_ContentPlaceHolder1_ddlProvince" class="mySelect">
+	<option selected="selected" value="11">北京市</option>
+	<option value="12">天津市</option>
+	<option value="13">河北省</option>
+	<option value="14">山西省</option>
+	<option value="15">内蒙古自治区</option>
+	<option value="21">辽宁省</option>
+	<option value="22">吉林省</option>
+	<option value="23">黑龙江省</option>
+	<option value="31">上海市</option>
+	<option value="32">江苏省</option>
+	<option value="33">浙江省</option>
+	<option value="34">安徽省</option>
+	<option value="35">福建省</option>
+	<option value="36">江西省</option>
+	<option value="37">山东省</option>
+	<option value="41">河南省</option>
+	<option value="42">湖北省</option>
+	<option value="43">湖南省</option>
+	<option value="44">广东省</option>
+	<option value="45">广西壮族自治区</option>
+	<option value="46">海南省</option>
+	<option value="50">重庆市</option>
+	<option value="51">四川省</option>
+	<option value="52">贵州省</option>
+	<option value="53">云南省</option>
+	<option value="54">西藏自治区</option>
+	<option value="61">陕西省</option>
+	<option value="62">甘肃省</option>
+	<option value="63">青海省</option>
+	<option value="64">宁夏回族自治区</option>
+	<option value="65">新疆维吾尔自治区</option>
+
+</select>
+            医师姓名：<input name="ctl00$ContentPlaceHolder1$txtName" type="text" value="李宁" id="ctl00_ContentPlaceHolder1_txtName" class="myTxt" />
+            所在医疗机构：<input name="ctl00$ContentPlaceHolder1$txtZyUnit" type="text" value="协和医院" id="ctl00_ContentPlaceHolder1_txtZyUnit" class="myTxt" />
+            验证码:<input name="ctl00$ContentPlaceHolder1$checkcode" type="text" id="ctl00_ContentPlaceHolder1_checkcode" class="myTxt" style="width: 80px" />
+            <img id="imgVilidate" alt="更换验证码" src="pn.aspx" style="cursor: pointer; vertical-align: bottom"
+                border="0" onclick="ChangeCheckCode();" height="30" width="100px" />
+            <a href="#" onclick="ChangeCheckCode();">换一张</a>
+        </div>
+        <div class="myNotice">
+            <ul>
+                <li>所有查询条件为必填项。</li>
+                <li>姓名至少输入2个字。</li>
+                <li>所在医疗机构至少输入4个字。</li>
+            </ul>
+        </div>
+        <div style="height: 5px;">
+        </div>
+        <div style="text-align: center;">
+            <input type="submit" name="ctl00$ContentPlaceHolder1$ButtonSearch" value="查询" onclick="return CheckSearchCondition();" id="ctl00_ContentPlaceHolder1_ButtonSearch" class="myButton" />
+        </div>
+        <div style="height: 20px;">
+        </div>
+        <div class="myLine">
+        </div>
+        
+        <div style="height: 20px;">
+        </div>
+        <div style="text-align: center;">
+        </div>
+        
+        <div style="height: 40px;">
+        </div>
+    </div>
+
+    </div>
+    <div style="width: 990px; margin-left: auto; margin-right: auto;" id="myfoot">
+        <script type="text/javascript">
+            document.getElementById("myfoot").innerHTML = "<iframe scrolling=\"no\" frameborder=\"0\" width=\"100%\" height=\"280;\" src=\"http://www.moh.gov.cn/zhuzhan/bottom/iframe_bottom.shtml\"></iframe>";
+        </script>
+    </div>
+    </form>
+</body>
+</html>

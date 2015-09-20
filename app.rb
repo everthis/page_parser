@@ -87,12 +87,8 @@ class PageParser
 		http = Net::HTTP.new(uri.host, uri.port)
 		post_path = uri.path
 
-		puts post_path
-
 		post_data = URI.encode_www_form(post_param)
 		
-		puts param_cookie.inspect
-
 		post_headers = {
 			'Host' => '61.49.18.120',
 			'Pragma' => 'no-cache',
@@ -111,12 +107,13 @@ class PageParser
 		}
 
 		res, data = http.post(post_path, post_data, post_headers)
+	end
 
-
+	def detail
+		
 	end
 
 	def get_captcha_img(cookie_param)
-		puts cookie_param
 		time_stamp = Time.now.to_f
 	    file_name = "#{time_stamp}-image.gif"
 	    # actual_image_url = @@captchaUrl + params['t']
@@ -127,11 +124,22 @@ class PageParser
 	    file_name
 	end
 
-	def check_existence
-		if page.at_css('div.errorMsg')
-		    puts 'Error message found on page'
+	def check_alert(container)
+		first_script = container.css('script').first
+
+		if first_script.attribute('type')
+			nil
 		else
-		    puts 'No error message found on page'
+			first_script.text			
+		end
+	end
+
+	def check_existence(container, target)
+
+		if result = container.at_css(target)
+		    result
+		else
+			nil
 		end
 	end
 
@@ -142,7 +150,6 @@ get '/init' do
 	    "Access-Control-Allow-Origin"   => "*"
 
   obj = PageParser.new.get
-  puts obj
   img_url = PageParser.new.get_captcha_img(obj[:cookie].split(',')[0]).to_s
   returnObj = obj.merge!("img_url": img_url)
   JSON.generate(returnObj)
@@ -153,7 +160,6 @@ get '/captcha' do
   	    "Access-Control-Allow-Origin"   => "*"
 
   obj = {}
-  puts params
   img_url = PageParser.new.get_captcha_img(params['cookie']).to_s
   returnObj = obj.merge!("img_url": img_url)
   JSON.generate(returnObj)
@@ -167,14 +173,38 @@ get '/query' do
 
 	res_bo = response.body if response.is_a?(Net::HTTPSuccess)
 
+	puts res_bo
 	# parse returned data
 	html_doc = Nokogiri::HTML(res_bo)
 
-	puts res_bo
+	# query result types: 
+	# 0: alert
+	# 1: nothing found
+	# 2: found
+	# 3: else
 
-	first_script = html_doc.css('script').first.text
-	puts first_script
-	first_script
+
+	alert = PageParser.new.check_alert(html_doc)
+	nothing_found = PageParser.new.check_existence(html_doc, 'div[style="color: Red;"]')
+	found = PageParser.new.check_existence(html_doc, 'table')
+
+	query_obj = {}
+
+	if alert
+		query_obj['type'] = 0
+		query_obj['content'] = alert
+	elsif nothing_found
+		query_obj['type'] = 1
+		query_obj['content'] = nothing_found
+	elsif found
+		query_obj['type'] = 2
+		query_obj['content'] = found
+	else
+		query_obj['type'] = 3
+		query_obj['content'] = "something unexpected happened."
+	end
+
+	JSON.generate(query_obj)
 
 end
 
