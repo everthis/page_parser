@@ -87,10 +87,11 @@
         <span><img id="imgVilidate" alt="更换验证码" src="" style="cursor: pointer; vertical-align: bottom" border="0" height="30px" width="100px"></span>
         <span><a href="javascript:;" onclick="ChangeCheckCode();">换一张</a></span>        
 
-        <span id="submit">查询</span>
+        <span id="submit">加入队列</span>
     </div>
     <div id="alert"></div>
     <div id="result"></div>
+    <div id="detail"></div>
 
 
         <script>
@@ -99,6 +100,7 @@
         var $submit = doc.getElementById('submit');
         var $alert = doc.getElementById('alert');
         var $result = doc.getElementById('result');
+        var $detail = doc.getElementById('detail');
         var __VIEWSTATE;
         var __VIEWSTATEGENERATOR;
         var __EVENTVALIDATION;
@@ -195,6 +197,19 @@
         }
 
         window.addEventListener('load', init, false);
+        $result.addEventListener('click', function(ev){
+            var detailObj = {};
+            if(ev.target.tagName === 'SPAN') {
+                ev.preventDefault();
+                detailObj['url_path'] = ev.target.dataset['href'].slice(12);
+                detailObj['cookie'] = ev.target.dataset['cookie'];
+                XHR("GET", "http://127.0.0.1:4567/detail?url_path=" + detailObj['url_path'] + '&cookie=' + detailObj['cookie'], true, detailCallback);
+            }
+            
+        });
+        function detailCallback(data) {
+            $detail.innerHTML = data;
+        }
 
         </script>
     </body>
