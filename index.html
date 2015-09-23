@@ -41,6 +41,31 @@
                 color: white;
                 margin: 0 0 0 20px;
             }
+            #name {
+                width: 5em;
+            }
+            #cap {
+                width: 4em;
+            }
+            span[data-href] {
+                border-bottom: 1px solid #000;
+            }
+            .container {
+                max-width: 960px;
+                margin: 0 auto;
+            }
+            table {
+                border: 1px solid #ddd;
+                border-bottom: none;
+                margin-top: 10px;
+            }
+            table tr {
+                border-bottom: 1px solid #ddd;
+            }
+            td div {
+                white-space: nowrap;
+                margin: 0 10px;
+            }
         </style>
     </head>
     <body>
@@ -83,14 +108,14 @@
         </span>
         <span>医师姓名：</span><input name="" type="text" value="" id="name" class="myTxt">
         <span>所在医疗机构：</span><input name="" type="text" value="" id="org" class="myTxt">
-        <span>验证码：</span><input name="" type="text" id="cap" class="myTxt" style="width: 80px">
+        <span>验证码：</span><input name="" type="text" id="cap" class="myTxt">
         <span><img id="imgVilidate" alt="更换验证码" src="" style="cursor: pointer; vertical-align: bottom" border="0" height="30px" width="100px"></span>
         <span><a href="javascript:;" onclick="ChangeCheckCode();">换一张</a></span>        
 
         <span id="submit">加入队列</span>
     </div>
     <div id="alert"></div>
-    <div id="result"></div>
+    <div id="result" class="container"></div>
     <div id="detail"></div>
 
 
@@ -139,7 +164,6 @@
             var initCallbackData = JSON.parse(data);
             $imgVilidate.setAttribute('src', "images/" + initCallbackData.img_url);
 
-            console.log(initCallbackData);
         }
 
 
@@ -166,7 +190,6 @@
         }
 
         function queryCB(data) {
-        	console.log(data);
             data = JSON.parse(data);
             if (data.type === 0 || data.type === 1 || data.type === 3) {
                 $alert.innerHTML = data.content;
@@ -181,7 +204,6 @@
         	var initCallbackData = JSON.parse(data);
         	$imgVilidate.setAttribute('src', "images/" + initCallbackData.img_url);
 
-            console.log(initCallbackData);
 
             cookie = initCallbackData["cookie"];
             __VIEWSTATE = initCallbackData['__VIEWSTATE'];
@@ -193,6 +215,7 @@
         function submitQuery() {
             $alert.innerHTML = ""; 
             $result.innerHTML = "";
+            $detail.innerHTML = "";
         	query();
         }
 
